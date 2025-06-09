@@ -4,44 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>洪碩遠 | 數據分析</title>
+    <!-- 引入 Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- 引入 Font Awesome CDN (用於圖示) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- 引入外部 CSS 檔案 -->
+    <link rel="stylesheet" href="style.css">
     <!-- Chosen Palette: Warm Neutral (Stone) with a Teal Accent -->
-    <!-- Application Structure Plan: The SPA is designed as a top-down narrative journey. It starts with a strong Hero section to establish identity, followed by a sticky navigation for easy access to all parts. The core structure is thematic: 1. A personal introduction ('關於我'). 2. An interactive Skills section featuring a radar chart for a quick, visual assessment of core competencies. 3. A Project section with expandable cards, allowing users to choose their depth of exploration (progressive disclosure). 4. A clean timeline for Experience & Education. This structure was chosen to guide the user from a high-level impression to detailed evidence of capabilities in a logical, engaging flow, superior to a static document. -->
-    <!-- Visualization & Content Choices: 1. Skills -> Goal: Compare/Inform -> Viz: Radar Chart -> Interaction: Visual proficiency mapping -> Justification: Provides an immediate, digestible summary of strengths -> Library: Chart.js (Canvas). 2. Projects -> Goal: Organize/Detail on Demand -> Viz: Interactive Cards -> Interaction: Click to expand/collapse -> Justification: Keeps the UI clean while providing deep-dive information access -> Method: Vanilla JS DOM. 3. Experience -> Goal: Show Chronology -> Viz: Vertical Timeline -> Interaction: Hover effects -> Justification: Intuitive for presenting time-based history -> Method: HTML/CSS. -->
+    <!-- Application Structure Plan: The SPA is designed as a top-down narrative journey. It starts with a strong Hero section to establish identity, followed by a sticky navigation for easy access to all parts. The core structure is thematic: 1. A personal introduction ('關於我'). 2. An interactive Skills section featuring a radar chart for a quick, visual assessment of core competencies. 3. A Project section with expandable cards, allowing users to choose their depth of exploration (progressive disclosure). 4. A clean timeline for Experience & Education. A new 'AI Tools' section is added after the Hero section to integrate LLM-powered features. This structure was chosen to guide the user from a high-level impression to detailed evidence of capabilities in a logical, engaging flow, superior to a static document. -->
+    <!-- Visualization & Content Choices: 1. Skills -> Goal: Compare/Inform -> Viz: Radar Chart -> Interaction: Visual proficiency mapping -> Justification: Provides an immediate, digestible summary of strengths -> Library: Chart.js (Canvas). 2. Projects -> Goal: Organize/Detail on Demand -> Viz: Interactive Cards -> Interaction: Click to expand/collapse -> Justification: Keeps the UI clean while providing deep-dive information access -> Method: Vanilla JS DOM. 3. Experience -> Goal: Show Chronology -> Viz: Vertical Timeline -> Interaction: Hover effects -> Justification: Intuitive for presenting time-based history -> Method: HTML/CSS. 4. AI Resume Feedback & Interview Questions -> Goal: Provide direct value/insight -> Viz: Modal output -> Interaction: Button click to trigger LLM call -> Justification: Showcases LLM integration and offers practical tools -> Library: Gemini API (Vanilla JS fetch). -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-    <style>
-        body {
-            font-family: 'Inter', 'Noto Sans TC', sans-serif;
-        }
-        .section-title {
-            @apply text-3xl font-bold text-stone-800 mb-8 text-center;
-        }
-        .card {
-            @apply bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300;
-        }
-        .skill-tag {
-            @apply bg-teal-100 text-teal-800 text-sm font-medium px-3 py-1 rounded-full; /* Removed mr-2 mb-2 */
-        }
-        .timeline-item {
-            @apply relative pl-8 sm:pl-12 pb-12;
-        }
-        .timeline-item:last-child {
-            @apply pb-0;
-        }
-        .timeline-marker {
-            @apply absolute left-0 top-1 w-4 h-4 bg-teal-500 rounded-full border-4 border-stone-50;
-        }
-        .timeline-line {
-            @apply absolute left-[7px] top-1 h-full w-0.5 bg-teal-200;
-        }
-        .project-details {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.7s ease-in-out;
-        }
-    </style>
 </head>
 <body class="bg-stone-50 text-stone-700">
 
@@ -54,6 +28,7 @@
                 <a href="#skills" class="hover:text-teal-600 transition-colors">核心技能</a>
                 <a href="#projects" class="hover:text-teal-600 transition-colors">專案經驗</a>
                 <a href="#experience" class="hover:text-teal-600 transition-colors">工作與學歷</a>
+                <a href="#ai-tools" class="hover:text-teal-600 transition-colors">AI 輔助工具</a>
             </div>
             <a href="https://github.com/cccc112" target="_blank" class="hidden md:inline-block bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-600 transition-colors">
                 <i class="fab fa-github mr-2"></i>GitHub
@@ -68,6 +43,7 @@
             <a href="#skills" class="block py-2">核心技能</a>
             <a href="#projects" class="block py-2">專案經驗</a>
             <a href="#experience" class="block py-2">工作與學歷</a>
+            <a href="#ai-tools" class="block py-2">AI 輔助工具</a>
             <a href="https://github.com/cccc112" target="_blank" class="block mt-2 text-teal-600 font-semibold"><i class="fab fa-github mr-2"></i>GitHub</a>
         </div>
     </header>
@@ -94,7 +70,7 @@
             <div class="grid md:grid-cols-5 gap-10 items-center">
                 <div class="md:col-span-3">
                     <h3 class="text-2xl font-semibold text-stone-800 mb-4">個人簡介</h3>
-                    <p class="mb-6 leading-relaxed">目前就讀於輔仁大學統計資訊學系，對資料與人工智慧的應用充滿熱情，尤其專注於醫療健康領域的 AI 解決方案。我具備扎實的 Python 程式設計與資料分析能力，持有相關證照，並熟悉 Git/GitHub 版本控制、主流深度學習框架與影像處理技術。我曾獨立完成結合手部追蹤與圖像辨識的 AI 專案，展現將理論付諸實踐的能力。我深信資料蘊藏著無限潛力，渴望將所學知識轉化為具體的實務價值，投身於真實場域的創新應用。</p>
+                    <p class="mb-6 leading-relaxed">目前就讀於輔仁大學統計資訊學系，對資料與人工智慧的應用充滿熱情。我具備扎實的 Python 程式設計與資料分析能力，持有相關證照，並熟悉 Git/GitHub 版本控制、主流深度學習框架與影像處理技術。我曾獨立完成結合手部追蹤與圖像辨識的 AI 專案，展現將理論付諸實踐的能力。我深信資料蘊藏著無限潛力，渴望將所學知識轉化為具體的實務價值，投身於真實場域的創新應用。</p>
                 </div>
                 <div class="md:col-span-2">
                      <div class="card">
@@ -121,19 +97,19 @@
                 <div>
                     <div class="mb-6">
                         <h3 class="text-xl font-semibold text-stone-800 mb-3">程式語言</h3>
-                        <div class="flex flex-wrap gap-2">
+                        <div class="flex flex-wrap">
                             <span class="skill-tag">Python (TQC+ 證照)</span><span class="skill-tag">Java</span><span class="skill-tag">R</span>
                         </div>
                     </div>
                     <div class="mb-6">
                         <h3 class="text-xl font-semibold text-stone-800 mb-3">資料分析 & 人工智慧</h3>
-                        <div class="flex flex-wrap gap-2">
-                             <span class="skill-tag">機器學習</span><span class="skill-tag">深度學習 (TensorFlow/Keras)</span><span class="skill-tag">影像處理 (OpenCV)</span><span class="skill-tag">資料清理</span><span class="skill-tag">特徵工程</span><span class="skill-tag">模型評估 (MSE, R², AUC)</span><span class="skill-tag">Kaggle</span><span class="skill-tag">生成式 AI</span>
+                        <div class="flex flex-wrap">
+                             <span class="skill-tag">機器學習</span><span class="skill-tag">深度學習 (TensorFlow/Keras)</span><span class="skill-tag">影像處理 (OpenCV)</span><span class="skill-tag">資料清理</span><span class="skill-tag">特徵工程</span><span class="skill-tag">模型評估 (MSE, R², AUC)</span>
                         </div>
                     </div>
                      <div>
                         <h3 class="text-xl font-semibold text-stone-800 mb-3">工具與其他</h3>
-                        <div class="flex flex-wrap gap-2">
+                        <div class="flex flex-wrap">
                             <span class="skill-tag">Git/GitHub</span><span class="skill-tag">MediaPipe</span><span class="skill-tag">TOEIC 455</span><span class="skill-tag">GEPT 初級</span>
                         </div>
                     </div>
@@ -225,6 +201,21 @@
         </section>
     </main>
 
+    <!-- Modal for LLM Output -->
+    <div id="llmResponseModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button class="modal-close-button" id="closeModalButton"><i class="fas fa-times"></i></button>
+            <h3 id="modalTitle" class="text-2xl font-bold text-stone-800 mb-6 text-center"></h3>
+            <div id="modalBody" class="text-stone-700 leading-relaxed text-left">
+                <div class="modal-loading hidden">
+                    <div class="spinner"></div>
+                    <p class="ml-4 text-lg">AI 正在為您生成內容中，請稍候...</p>
+                </div>
+                <div id="modalContentText" class="whitespace-pre-wrap break-words"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="bg-stone-800 text-stone-300 py-8">
         <div class="container mx-auto px-6 text-center">
@@ -239,95 +230,8 @@
         </div>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Mobile Menu Toggle
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-            
-            // Close mobile menu when a link is clicked
-            mobileMenu.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.add('hidden');
-                });
-            });
-
-            // Radar Chart
-            const ctx = document.getElementById('skillsRadarChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: ['程式語言', '資料分析', '機器學習', '影像處理', '專案實作', '協作能力'],
-                    datasets: [{
-                        label: '綜合能力評估',
-                        data: [85, 90, 80, 75, 90, 85],
-                        backgroundColor: 'rgba(20, 184, 166, 0.2)',
-                        borderColor: 'rgb(13, 148, 136)',
-                        pointBackgroundColor: 'rgb(13, 148, 136)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgb(13, 148, 136)'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            angleLines: {
-                                color: 'rgba(0, 0, 0, 0.1)'
-                            },
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.1)'
-                            },
-                            pointLabels: {
-                                font: {
-                                    size: 14,
-                                    weight: 'bold'
-                                },
-                                color: '#44403c' // stone-700
-                            },
-                             ticks: {
-                                backdropColor: 'transparent',
-                                color: '#a8a29e' // stone-400
-                            },
-                            suggestedMin: 0,
-                            suggestedMax: 100
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                             labels: {
-                                color: '#44403c' // stone-700
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Project Card Expansion
-            const projectCards = document.querySelectorAll('.project-card');
-            projectCards.forEach(card => {
-                const clickableArea = card.querySelector('.cursor-pointer');
-                const details = card.querySelector('.project-details');
-                const icon = card.querySelector('.expand-icon');
-
-                clickableArea.addEventListener('click', () => {
-                    if (details.style.maxHeight) {
-                        details.style.maxHeight = null;
-                        icon.style.transform = 'rotate(0deg)';
-                    } else {
-                        details.style.maxHeight = details.scrollHeight + "px";
-                        icon.style.transform = 'rotate(180deg)';
-                    }
-                });
-            });
-        });
-    </script>
+    <!-- 引入外部 JavaScript 檔案 -->
+    <script src="script.js"></script>
 
 </body>
 </html>
